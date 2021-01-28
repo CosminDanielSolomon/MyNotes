@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import './notesItemCard.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(NotesList());
 }
 
-class MyApp extends StatelessWidget {
+class NotesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const appTitle = "My Happy NOTES";
@@ -65,19 +67,19 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text(appTitle),
           centerTitle: true,
+          backgroundColor: Colors.lightBlue[900],
         ),
         body: Container(
           width: double.infinity,
           child: ListView(
             children: [
               ...(notesTitle).map((currentNoteTitle) {
-                return Card(
-                  child: Text(currentNoteTitle),
-                );
+                return NotesItemCard(currentNoteTitle);
               }).toList(),
             ],
           ),
         ),
+        backgroundColor: Colors.blue,
       ),
     );
   }
