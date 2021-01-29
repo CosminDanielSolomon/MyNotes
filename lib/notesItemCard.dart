@@ -12,9 +12,10 @@ class NotesItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           title,
-          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+          style: TextStyle(color: Colors.black),
         ),
       ),
+      // color: Theme.of(context).primaryColor,
     );
   }
 }
