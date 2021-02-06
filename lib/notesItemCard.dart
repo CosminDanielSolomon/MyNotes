@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
-class NotesItemCard extends StatelessWidget {
+class NoteItemCard extends StatelessWidget {
+  final Key key;
   final String title;
 
-  NotesItemCard(this.title);
+  NoteItemCard(this.key, this.title);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Text(
+      key: key, // the key is needed for the ReordableListView
+      child: ListTile(
+        isThreeLine: false,
+        title: Text(
           title,
-          style: TextStyle(color: Colors.black),
+          maxLines: 1,
+          softWrap: false,
+          overflow: TextOverflow.fade,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
       ),
-      // color: Theme.of(context).primaryColor,
     );
   }
 }
