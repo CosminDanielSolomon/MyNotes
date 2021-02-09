@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './notesItemCard.dart';
+import 'noteCard.dart';
 
 class MyNotesList extends StatefulWidget {
   final String title;
@@ -42,7 +42,7 @@ class _MyNotesListState extends State<MyNotesList> {
           onReorder: _updateMyItems,
           children: [
             ...(notesTitle).map((currentNoteTitle) {
-              return NoteItemCard(ValueKey(currentNoteTitle), currentNoteTitle);
+              return NoteCard(ValueKey(currentNoteTitle), currentNoteTitle);
             }).toList(),
           ],
         ),
