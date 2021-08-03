@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'models/noteData.dart';
+
 class NoteCard extends StatelessWidget {
   final Key key;
-  final String title;
+  final NoteData noteData;
 
-  NoteCard(this.key, this.title);
+  NoteCard(this.key, this.noteData);
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +14,12 @@ class NoteCard extends StatelessWidget {
       key: key, // the key is needed for the ReordableListView
       child: InkWell(
         onTap: () {
-          print('card tapped');
-          Navigator.pushNamed(context, '/second');
+          Navigator.pushNamed(context, '/noteDetails', arguments: noteData);
         },
         child: ListTile(
           isThreeLine: false,
           title: Text(
-            title,
+            noteData.title, // TODO qui devo usare Consumer?
             maxLines: 1,
             softWrap: false,
             overflow: TextOverflow.fade,

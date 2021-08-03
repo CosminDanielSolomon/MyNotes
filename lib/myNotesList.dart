@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'models/noteData.dart';
+import 'models/notesModel.dart';
 import 'noteCard.dart';
 
 class MyNotesList extends StatefulWidget {
@@ -12,7 +15,13 @@ class MyNotesList extends StatefulWidget {
 }
 
 class _MyNotesListState extends State<MyNotesList> {
-  List<String> notesTitle = ["nota1 nota1 nota1 longggggggggggggggggggggggggggggggggggggggggggggggg", "nota2", "nota3", "nota4"];
+  List<NoteData> _notes;
+
+  @override
+  void initState() {
+    _notes = Provider.of<NotesModel>(context, listen: false).notesList;
+    super.initState();
+  }
 
   void _updateMyItems(int oldIndex, int newIndex) {
     setState(() {
@@ -20,8 +29,9 @@ class _MyNotesListState extends State<MyNotesList> {
         // removing the item at oldIndex will shorten the list by 1.
         newIndex -= 1;
       }
-      final String element = notesTitle.removeAt(oldIndex);
-      notesTitle.insert(newIndex, element);
+
+      final NoteData element = _notes.removeAt(oldIndex);
+      _notes.insert(newIndex, element);
     });
   }
 
@@ -38,19 +48,29 @@ class _MyNotesListState extends State<MyNotesList> {
       ),
       body: Container(
         width: double.infinity,
-        child: ReorderableListView(
-          onReorder: _updateMyItems,
-          children: [
-            ...(notesTitle).map((currentNoteTitle) {
-              return NoteCard(ValueKey(currentNoteTitle), currentNoteTitle);
-            }).toList(),
-          ],
+        child: Consumer<NotesModel>(
+          builder: (context, notesData, child) {
+            return ReorderableListView(
+              onReorder: _updateMyItems,
+              children: [
+                ...(_notes).map((noteData) {
+                  return NoteCard(Key(noteData.id), noteData);
+                }).toList(),
+              ],
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: addNewNote,
       ),
     );
+  }
+
+  void addNewNote() {
+    Provider.of<NotesModel>(context, listen: false).add(NoteData("ciao"));
+    _notes = Provider.of<NotesModel>(context, listen: false).notesList;
+    print("fatto!");
   }
 }

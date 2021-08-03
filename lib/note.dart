@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 
-class SecondScreen extends StatelessWidget {
+import 'package:provider/provider.dart';
+
+import 'models/noteData.dart';
+import 'models/notesModel.dart';
+
+class Note extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    NoteData arg = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Second Screen"),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to first screen when tapped.
-            Navigator.pop(context);
-          },
-          child: Text('Go back!'),
-        ),
+      body: Column(
+        children: [
+          Text(
+            arg.title,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Navigate back to first screen when tapped.
+              Navigator.pop(context);
+            },
+            child: Text('Go back!'),
+          ),
+        ],
       ),
     );
   }

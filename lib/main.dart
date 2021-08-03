@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:notes_with_flutter/common/theme.dart';
-import 'package:notes_with_flutter/note.dart';
-import './myNotesList.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'models/notesModel.dart';
+import 'myNotesList.dart';
+import 'note.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,9 +24,15 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => MyNotesList(title: appTitle),
+        '/': (context) => ChangeNotifierProvider(
+              // ChangeNotifierProvider must be placed above the widgets that need to access it
+              create: (context) => NotesModel(),
+              child: MyNotesList(
+                title: appTitle,
+              ),
+            ),
         // When navigating to the "/second" route, build the SecondScreen widget.
-        '/second': (context) => SecondScreen(),
+        '/noteDetails': (context) => Note(),
       },
       // home: MyNotesList(title: appTitle),
     );
