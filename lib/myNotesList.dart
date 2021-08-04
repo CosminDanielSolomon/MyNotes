@@ -15,14 +15,6 @@ class MyNotesList extends StatefulWidget {
 }
 
 class _MyNotesListState extends State<MyNotesList> {
-  List<NoteData> _notes;
-
-  @override
-  void initState() {
-    _notes = Provider.of<NotesModel>(context, listen: false).notesList;
-    super.initState();
-  }
-
   void _updateMyItems(int oldIndex, int newIndex) {
     setState(() {
       if (oldIndex < newIndex) {
@@ -30,8 +22,12 @@ class _MyNotesListState extends State<MyNotesList> {
         newIndex -= 1;
       }
 
-      final NoteData element = _notes.removeAt(oldIndex);
-      _notes.insert(newIndex, element);
+      final NoteData element = Provider.of<NotesModel>(context, listen: false)
+          .notes
+          .removeAt(oldIndex);
+      Provider.of<NotesModel>(context, listen: false)
+          .notes
+          .insert(newIndex, element);
     });
   }
 
@@ -53,7 +49,8 @@ class _MyNotesListState extends State<MyNotesList> {
             return ReorderableListView(
               onReorder: _updateMyItems,
               children: [
-                ...(_notes).map((noteData) {
+                ...(notesData.notes).map((noteData) {
+                  print(noteData.id);
                   return NoteCard(Key(noteData.id), noteData);
                 }).toList(),
               ],
@@ -63,14 +60,16 @@ class _MyNotesListState extends State<MyNotesList> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: addNewNote,
+        onPressed: () {
+          NoteData newNoteData = NoteData("", "");
+          Provider.of<NotesModel>(context, listen: false).add(newNoteData);
+          Navigator.pushNamed(context, '/noteDetails', arguments: newNoteData)
+              .then((value) {
+                print("modificato");
+            Provider.of<NotesModel>(context, listen: false).signalNoteUpdate();
+          });
+        },
       ),
     );
-  }
-
-  void addNewNote() {
-    Provider.of<NotesModel>(context, listen: false).add(NoteData("ciao"));
-    _notes = Provider.of<NotesModel>(context, listen: false).notesList;
-    print("fatto!");
   }
 }

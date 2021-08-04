@@ -1,32 +1,57 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
-
 import 'models/noteData.dart';
-import 'models/notesModel.dart';
 
 class Note extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    NoteData arg = ModalRoute.of(context).settings.arguments;
+    NoteData note = ModalRoute.of(context).settings.arguments;
+    String noteBarText = (note.title != null &&
+            note.description != null &&
+            note.title.isNotEmpty &&
+            note.description.isNotEmpty)
+        ? "Edit note"
+        : "New note";
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Second Screen"),
+        title: Text(noteBarText),
       ),
-      body: Column(
-        children: [
-          Text(
-            arg.title,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Navigate back to first screen when tapped.
-              Navigator.pop(context);
-            },
-            child: Text('Go back!'),
-          ),
-        ],
+      body: getNoteLayout(context, note),
+    );
+  }
+
+  Container getNoteLayout(BuildContext context, NoteData note) {
+    TextEditingController titleController =
+        TextEditingController(text: note.title);
+    return Container(
+      margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              controller: titleController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                  border: UnderlineInputBorder(), labelText: 'Note title'),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              ),
+              onChanged: (String value) async {
+                print(value);
+                note.title = value;
+              },
+            ),
+            TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              decoration: InputDecoration(
+                  border: UnderlineInputBorder(), labelText: 'Note body'),
+            ),
+          ],
+        ),
       ),
     );
   }

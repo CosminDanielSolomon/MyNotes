@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 
 class NoteData {
 
+  int _position;
   String _id;
   String _title;
   String _description;
@@ -9,13 +10,16 @@ class NoteData {
 
   // constructor
 
-  NoteData(this._title) { // title is mandatory
+  NoteData(this._title, this._description) { // title is mandatory
     var uuid = Uuid();
     this._id = uuid.v1();
     this._dateTime = DateTime.now();
   }
 
   // getters, setters, operators
+
+  int get position => _position;
+  set position(int position) => this._position = position;
 
   String get id => _id;
 

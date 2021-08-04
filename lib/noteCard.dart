@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'models/noteData.dart';
+import 'models/notesModel.dart';
 
 class NoteCard extends StatelessWidget {
   final Key key;
@@ -14,12 +16,16 @@ class NoteCard extends StatelessWidget {
       key: key, // the key is needed for the ReordableListView
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/noteDetails', arguments: noteData);
+          Navigator.pushNamed(context, '/noteDetails', arguments: noteData)
+              .then(
+            (value) => Provider.of<NotesModel>(context, listen: false)
+                .signalNoteUpdate(),
+          );
         },
         child: ListTile(
           isThreeLine: false,
           title: Text(
-            noteData.title, // TODO qui devo usare Consumer?
+            noteData.title,
             maxLines: 1,
             softWrap: false,
             overflow: TextOverflow.fade,
