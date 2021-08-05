@@ -11,29 +11,30 @@ class NotesModel extends ChangeNotifier {
 
   List<NoteData> get notes => _notes;
 
-  /// Add and remove are the only ways to modify the
-  /// list of notes from the outside.
   void add(NoteData note) {
     _notes.insert(0, note);
+    // TODO insert to DB
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
   }
 
   void remove(NoteData note) {
     _notes.remove(note);
+    // TODO remove from DB
     notifyListeners();
   }
 
-  void signalNoteUpdate() {
+  void signalNoteUpdate(NoteData note) {
+    // TODO update on DB
     notifyListeners();
   }
 
-  /// Removes all items from the cart.
-  void removeAll() {
-    _notes.clear();
-    // This call tells the widgets that are listening to this model to rebuild.
-    notifyListeners();
-  }
+  // /// Removes all items from the cart.
+  // void removeAll() {
+  //   _notes.clear();
+  //   // This call tells the widgets that are listening to this model to rebuild.
+  //   notifyListeners();
+  // }
 
   List<NoteData> _initializeData() {
     // TODO get data from local storage

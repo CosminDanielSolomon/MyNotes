@@ -18,20 +18,13 @@ class NoteCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(context, '/noteDetails', arguments: noteData)
               .then((value) => {
-                    if (value != null && value)
-                      {
-                        Provider.of<NotesModel>(context, listen: false)
-                            .remove(noteData)
-                      }
+                    if ((value != null && value) ||
+                        (noteData.title == "" && noteData.description == ""))
+                      Provider.of<NotesModel>(context, listen: false)
+                          .remove(noteData)
                     else
-                      {
-                        if (noteData.title == "" && noteData.description == "")
-                          Provider.of<NotesModel>(context, listen: false)
-                              .remove(noteData)
-                        else
-                          Provider.of<NotesModel>(context, listen: false)
-                              .signalNoteUpdate()
-                      }
+                      Provider.of<NotesModel>(context, listen: false)
+                          .signalNoteUpdate(noteData)
                   });
         },
         child: ListTile(

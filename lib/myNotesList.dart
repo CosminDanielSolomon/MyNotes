@@ -77,17 +77,13 @@ class _MyNotesListState extends State<MyNotesList> {
           Provider.of<NotesModel>(context, listen: false).add(newNoteData);
           Navigator.pushNamed(context, '/noteDetails', arguments: newNoteData)
               .then((value) {
-            if (value != null && value) {
+            if ((value != null && value) ||
+                (newNoteData.title == "" && newNoteData.description == ""))
               Provider.of<NotesModel>(context, listen: false)
                   .remove(newNoteData);
-            } else {
-              if (newNoteData.title == "" && newNoteData.description == "")
-                Provider.of<NotesModel>(context, listen: false)
-                    .remove(newNoteData);
-              else
-                Provider.of<NotesModel>(context, listen: false)
-                    .signalNoteUpdate();
-            }
+            else
+              Provider.of<NotesModel>(context, listen: false)
+                  .signalNoteUpdate(newNoteData);
           });
         },
       ),
