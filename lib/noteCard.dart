@@ -25,8 +25,12 @@ class NoteCard extends StatelessWidget {
                       }
                     else
                       {
-                        Provider.of<NotesModel>(context, listen: false)
-                            .signalNoteUpdate()
+                        if (noteData.title == "" && noteData.description == "")
+                          Provider.of<NotesModel>(context, listen: false)
+                              .remove(noteData)
+                        else
+                          Provider.of<NotesModel>(context, listen: false)
+                              .signalNoteUpdate()
                       }
                   });
         },

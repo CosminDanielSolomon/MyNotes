@@ -81,8 +81,12 @@ class _MyNotesListState extends State<MyNotesList> {
               Provider.of<NotesModel>(context, listen: false)
                   .remove(newNoteData);
             } else {
-              Provider.of<NotesModel>(context, listen: false)
-                  .signalNoteUpdate();
+              if (newNoteData.title == "" && newNoteData.description == "")
+                Provider.of<NotesModel>(context, listen: false)
+                    .remove(newNoteData);
+              else
+                Provider.of<NotesModel>(context, listen: false)
+                    .signalNoteUpdate();
             }
           });
         },
