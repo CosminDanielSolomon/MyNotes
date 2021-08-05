@@ -19,6 +19,11 @@ class NotesModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void remove(NoteData note) {
+    _notes.remove(note);
+    notifyListeners();
+  }
+
   void signalNoteUpdate() {
     notifyListeners();
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'models/noteData.dart';
 
@@ -16,6 +17,17 @@ class Note extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(noteBarText),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showAlertDialog(context);
+            },
+          )
+        ],
       ),
       body: getNoteLayout(context, note),
     );
@@ -24,12 +36,16 @@ class Note extends StatelessWidget {
   Container getNoteLayout(BuildContext context, NoteData note) {
     TextEditingController titleController =
         TextEditingController(text: note.title);
+    TextEditingController descriptionController =
+        TextEditingController(text: note.description);
+    final DateFormat formatter = DateFormat('HH:mm on dd MMM yyyy');
     return Container(
       margin: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
             TextField(
+              textCapitalization: TextCapitalization.sentences,
               controller: titleController,
               keyboardType: TextInputType.multiline,
               maxLines: null,
@@ -40,19 +56,67 @@ class Note extends StatelessWidget {
                 fontSize: 20.0,
               ),
               onChanged: (String value) async {
-                print(value);
                 note.title = value;
+                note.lastModifyDate = DateTime.now();
               },
             ),
             TextField(
+              controller: descriptionController,
               keyboardType: TextInputType.multiline,
               maxLines: null,
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
-                  border: UnderlineInputBorder(), labelText: 'Note body'),
+                  border: InputBorder.none, labelText: 'Note body'),
+              onChanged: (String value) async {
+                note.description = value;
+                note.lastModifyDate = DateTime.now();
+              },
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "Last edit at " + formatter.format(note.lastModifyDate),
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Yes"),
+      onPressed: () {
+        Navigator.pop(context);
+        Navigator.pop(context, true);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Delete note?"),
+      content: Text("The note will be permanently deleted. Do you confirm?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

@@ -1,5 +1,5 @@
-name: notes_with_flutter
-description: A new Flutter project.
+name: Personal Notes
+description: An app to keep your notes safe on your device.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
 
   provider: ^4.0.0
+
+  intl: ^0.16.0
 
   uuid: 2.2.2
 

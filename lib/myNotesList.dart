@@ -46,15 +46,27 @@ class _MyNotesListState extends State<MyNotesList> {
         width: double.infinity,
         child: Consumer<NotesModel>(
           builder: (context, notesData, child) {
-            return ReorderableListView(
-              onReorder: _updateMyItems,
-              children: [
-                ...(notesData.notes).map((noteData) {
-                  print(noteData.id);
-                  return NoteCard(Key(noteData.id), noteData);
-                }).toList(),
-              ],
-            );
+            if (notesData.notes.length > 0)
+              return ReorderableListView(
+                onReorder: _updateMyItems,
+                children: [
+                  ...(notesData.notes).map((noteData) {
+                    print(noteData.id);
+                    return NoteCard(Key(noteData.id), noteData);
+                  }).toList(),
+                ],
+              );
+            else
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Tap on plus button to add a new note",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18.0,
+                  ),
+                ),
+              );
           },
         ),
       ),
@@ -65,8 +77,13 @@ class _MyNotesListState extends State<MyNotesList> {
           Provider.of<NotesModel>(context, listen: false).add(newNoteData);
           Navigator.pushNamed(context, '/noteDetails', arguments: newNoteData)
               .then((value) {
-                print("modificato");
-            Provider.of<NotesModel>(context, listen: false).signalNoteUpdate();
+            if (value != null && value) {
+              Provider.of<NotesModel>(context, listen: false)
+                  .remove(newNoteData);
+            } else {
+              Provider.of<NotesModel>(context, listen: false)
+                  .signalNoteUpdate();
+            }
           });
         },
       ),

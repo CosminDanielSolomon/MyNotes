@@ -17,10 +17,18 @@ class NoteCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(context, '/noteDetails', arguments: noteData)
-              .then(
-            (value) => Provider.of<NotesModel>(context, listen: false)
-                .signalNoteUpdate(),
-          );
+              .then((value) => {
+                    if (value != null && value)
+                      {
+                        Provider.of<NotesModel>(context, listen: false)
+                            .remove(noteData)
+                      }
+                    else
+                      {
+                        Provider.of<NotesModel>(context, listen: false)
+                            .signalNoteUpdate()
+                      }
+                  });
         },
         child: ListTile(
           isThreeLine: false,
