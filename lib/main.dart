@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'package:notes_with_flutter/common/theme.dart';
 import 'package:provider/provider.dart';
 
+import 'common/theme.dart';
 import 'models/notesModel.dart';
 import 'myNotesList.dart';
 import 'note.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
+void main() async {
+  runApp(MyApp());
+}
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override

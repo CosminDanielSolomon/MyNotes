@@ -1,7 +1,6 @@
 import 'package:uuid/uuid.dart';
 
 class NoteData {
-
   int _position;
   String _id;
   String _title;
@@ -10,11 +9,15 @@ class NoteData {
 
   // constructor
 
-  NoteData(this._title, this._description) { // title is mandatory
+  NoteData(this._title, this._description) {
     var uuid = Uuid();
     this._id = uuid.v1();
     this._dateTime = DateTime.now();
+    _position = 0; // TODO replace with logic
   }
+
+  NoteData.fromDb(
+      this._position, this._id, this._title, this._description, this._dateTime);
 
   // getters, setters, operators
 
@@ -37,4 +40,17 @@ class NoteData {
 
   @override
   bool operator ==(Object other) => other is NoteData && other._id == _id;
+
+  // for DB access
+  // Convert a NoteData into a Map. The keys must correspond to the names of the
+  // columns in the database.
+  Map<String, dynamic> toMap() {
+    return {
+      'id': _id,
+      'position': _position,
+      'title': _title,
+      'description': _description,
+      'dateTime': _dateTime.toIso8601String(),
+    };
+  }
 }

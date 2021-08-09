@@ -15,6 +15,12 @@ class MyNotesList extends StatefulWidget {
 }
 
 class _MyNotesListState extends State<MyNotesList> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<NotesModel>(context, listen: false).initializeDataFromDb();
+  }
+
   void _updateMyItems(int oldIndex, int newIndex) {
     setState(() {
       if (oldIndex < newIndex) {
@@ -46,6 +52,8 @@ class _MyNotesListState extends State<MyNotesList> {
         width: double.infinity,
         child: Consumer<NotesModel>(
           builder: (context, notesData, child) {
+            print(notesData.notes.length);
+            print(notesData.notes);
             if (notesData.notes.length > 0)
               return ReorderableListView(
                 onReorder: _updateMyItems,
