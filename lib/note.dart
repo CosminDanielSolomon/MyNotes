@@ -38,7 +38,7 @@ class Note extends StatelessWidget {
         TextEditingController(text: note.title);
     TextEditingController descriptionController =
         TextEditingController(text: note.description);
-    final DateFormat formatter = DateFormat('HH:mm on dd MMM yyyy');
+    final DateFormat formatter = DateFormat('dd MMM yyyy At HH:mm');
     return Container(
       margin: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: SingleChildScrollView(
@@ -75,7 +75,7 @@ class Note extends StatelessWidget {
             Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                "Last edit at " + formatter.format(note.lastModifyDate),
+                "Last edit on " + formatter.format(note.lastModifyDate),
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
@@ -89,13 +89,13 @@ class Note extends StatelessWidget {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed: () {
         Navigator.pop(context);
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("Yes"),
       onPressed: () {
         Navigator.pop(context);

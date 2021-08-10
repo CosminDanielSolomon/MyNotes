@@ -10,10 +10,8 @@ class NotesModel extends ChangeNotifier {
   NotesModel();
 
   void initializeDataFromDb() async {
-    print("initializeDataFromDb() called!");
     _notes = await DatabaseHandler.instance.notes();
     notifyListeners();
-    print(_notes);
   }
 
   List<NoteData> get notes => _notes;
@@ -23,17 +21,27 @@ class NotesModel extends ChangeNotifier {
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
     await DatabaseHandler.instance.insertNote(note);
+    this.updateNotesPosition();
   }
 
   void remove(NoteData note) async {
     _notes.remove(note);
     notifyListeners();
     await DatabaseHandler.instance.deleteNote(note);
+    this.updateNotesPosition();
   }
 
   void signalNoteUpdate(NoteData note) async {
     notifyListeners();
     await DatabaseHandler.instance.updateNote(note);
+  }
+
+  void updateNotesPosition() async {
+    int pos = 0;
+    for (NoteData note in _notes) {
+      await DatabaseHandler.instance.updateNotePosition(note, pos);
+      pos++;
+    }
   }
 
   // /// Removes all items from the cart.

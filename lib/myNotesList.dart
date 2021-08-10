@@ -34,6 +34,7 @@ class _MyNotesListState extends State<MyNotesList> {
       Provider.of<NotesModel>(context, listen: false)
           .notes
           .insert(newIndex, element);
+      Provider.of<NotesModel>(context, listen: false).updateNotesPosition();
     });
   }
 
@@ -52,14 +53,11 @@ class _MyNotesListState extends State<MyNotesList> {
         width: double.infinity,
         child: Consumer<NotesModel>(
           builder: (context, notesData, child) {
-            print(notesData.notes.length);
-            print(notesData.notes);
             if (notesData.notes.length > 0)
               return ReorderableListView(
                 onReorder: _updateMyItems,
                 children: [
                   ...(notesData.notes).map((noteData) {
-                    print(noteData.id);
                     return NoteCard(Key(noteData.id), noteData);
                   }).toList(),
                 ],

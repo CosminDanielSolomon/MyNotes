@@ -27,7 +27,7 @@ class DatabaseHandler {
       join(path, 'notes_database.db'),
       onCreate: (database, version) async {
         await database.execute(
-          "CREATE TABLE $_notesTableName($_idColumnName TEXT NOT NULL PRIMARY KEY, $_titleColumnName TEXT NOT NULL, $_descriptionColumnName TEXT NOT NULL, $_positionColumnName INTEGER NOT NULL, $_dateTimeColumnName TEXT NOT NULL)",
+          "CREATE TABLE $_notesTableName($_idColumnName TEXT NOT NULL PRIMARY KEY, $_titleColumnName TEXT NOT NULL, $_descriptionColumnName TEXT NOT NULL, $_positionColumnName INTEGER, $_dateTimeColumnName TEXT NOT NULL)",
         );
       },
       version: 1,
@@ -37,12 +37,11 @@ class DatabaseHandler {
   Future<void> insertNote(NoteData noteData) async {
     // Get a reference to the database.
     final Database db = await instance.database;
-    int id = await db.insert(
+    await db.insert(
       _notesTableName,
       noteData.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print("id: " + id.toString());
   }
 
   Future<void> updateNote(NoteData noteData) async {
@@ -57,6 +56,14 @@ class DatabaseHandler {
     );
   }
 
+  Future<void> updateNotePosition(NoteData noteData, int position) async {
+    // Get a reference to the database.
+    final Database db = await instance.database;
+    await db.rawUpdate(
+        'UPDATE $_notesTableName SET $_positionColumnName = ? WHERE $_idColumnName = ?',
+        [position, noteData.id]);
+  }
+
   Future<void> deleteNote(NoteData noteData) async {
     // Get a reference to the database.
     final Database db = await database;
@@ -68,18 +75,17 @@ class DatabaseHandler {
     );
   }
 
-  // A method that retrieves all the dogs from the dogs table.
+  // A method that retrieves all the notes from the notes table.
   Future<List<NoteData>> notes() async {
     // Get a reference to the database.
     final Database db = await instance.database;
     // Query the table for all notes
-    final List<Map<String, dynamic>> maps = await db.query(_notesTableName);
+    final List<Map<String, dynamic>> maps =
+        await db.query(_notesTableName, orderBy: "$_positionColumnName ASC");
     print(maps);
-    print(maps.length);
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    // Convert the List<Map<String, dynamic> into a List<NoteData>.
     return List.generate(maps.length, (i) {
       return NoteData.fromDb(
-        maps[i][_positionColumnName],
         maps[i][_idColumnName],
         maps[i][_titleColumnName],
         maps[i][_descriptionColumnName],

@@ -1,7 +1,6 @@
 import 'package:uuid/uuid.dart';
 
 class NoteData {
-  int _position;
   String _id;
   String _title;
   String _description;
@@ -13,16 +12,11 @@ class NoteData {
     var uuid = Uuid();
     this._id = uuid.v1();
     this._dateTime = DateTime.now();
-    _position = 0; // TODO replace with logic
   }
 
-  NoteData.fromDb(
-      this._position, this._id, this._title, this._description, this._dateTime);
+  NoteData.fromDb(this._id, this._title, this._description, this._dateTime);
 
   // getters, setters, operators
-
-  int get position => _position;
-  set position(int position) => this._position = position;
 
   String get id => _id;
 
@@ -47,7 +41,6 @@ class NoteData {
   Map<String, dynamic> toMap() {
     return {
       'id': _id,
-      'position': _position,
       'title': _title,
       'description': _description,
       'dateTime': _dateTime.toIso8601String(),
